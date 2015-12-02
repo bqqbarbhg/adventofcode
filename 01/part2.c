@@ -13,13 +13,13 @@ int main(int argc, char **argv)
 		for (size_t i = 0; i < length; i++) {
 
 			unsigned relative = input[i] - '(';
-			if (relative < 2) {
-				floor -= relative * 2 - 1;
+			if (relative > 2)
+				continue;
 
-				if (floor < 0) {
-					printf("%d\n", (int)(base + i));
-					return 0;
-				}
+			floor -= relative * 2 - 1;
+			if (floor < 0) {
+				printf("%d\n", (int)(base + i));
+				return 0;
 			}
 		}
 
