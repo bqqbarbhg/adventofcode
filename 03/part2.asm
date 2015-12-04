@@ -19,11 +19,11 @@ start:
 
 	sub rsp, 24
 
-	; Santa's location
+	; Santas' locations
 	mov dword [rsp], 0      ; Santa X
 	mov dword [rsp + 4], 0  ; Santa Y
-	mov dword [rsp + 8], 0      ; Robo-Santa X
-	mov dword [rsp + 12], 0  ; Robo-Santa Y
+	mov dword [rsp + 8], 0  ; Robo-Santa X
+	mov dword [rsp + 12], 0 ; Robo-Santa Y
 
 	; Store the initial Santa position
 	lea r9, [rel move_list]
