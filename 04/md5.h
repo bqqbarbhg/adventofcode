@@ -2,7 +2,7 @@
 #define INCLUDED_MD5_H
 
 #define MD5_HASH_BYTES 16
-#define MD5_DUMP_LENGTH 33
+#define MD5_DUMP_LENGTH 36
 
 #include <stdint.h>
 
