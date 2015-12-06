@@ -22,7 +22,7 @@ int main(int argc, char **argv)
 
 	static char log[1024*1024];
 	cl_program program = ocl_compile_file(ocl, "part1_opencl.c", "", log, sizeof(log));
-	if (!program) {
+	if (ocl->error_count) {
 		fprintf(stderr, "Failed to compile\n%s\n", log);
 		return 1;
 	}
