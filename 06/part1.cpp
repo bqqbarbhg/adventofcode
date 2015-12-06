@@ -190,14 +190,12 @@ int main(int argc, char **argv)
 			1, 0, &total_cells, 0, 0, 0, 0);
 	log_error(error);
 
-	FILE *input = fopen("C:\\Dev\\Source\\adventofcode\\06\\input", "r");
-
-	while (!feof(input)) {
+	while (!feof(stdin)) {
 		char line[256];
 		int minX, minY, maxX, maxY;
 		cl_kernel kernel = 0;
 
-		if (!fgets(line, sizeof(line), input))
+		if (!fgets(line, sizeof(line), stdin))
 			continue;
 
 		if (sscanf(line, "turn on %d,%d through %d,%d",
