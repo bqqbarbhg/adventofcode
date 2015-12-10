@@ -2,7 +2,7 @@ import Data.List
 import Data.Maybe
 
 seesay [] = ""
-seesay (x:xs) = let index = (fromMaybe (length xs)) (findIndex (/= x) xs) in
+seesay (x:xs) = let index = fromMaybe (length xs) (findIndex (/= x) xs) in
     show (index + 1) ++ [x] ++ seesay (drop index xs)
 
 seesays 0 x = x
