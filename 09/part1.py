@@ -34,7 +34,7 @@ def astar(graph):
 	full_mask = (1 << len(graph)) - 1
 	graph_min = sum(node.min_edge for node in graph.values())
 
-	work = [(graph_min, State(node, node.mask, 0, graph_min, [node])) for node in graph.values()]
+	work = [(graph_min, State(node, node.mask, 0, graph_min - node.min_edge, [node])) for node in graph.values()]
 	heapq.heapify(work)
 
 	while work:
