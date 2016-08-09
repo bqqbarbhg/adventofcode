@@ -54,6 +54,65 @@
 
 # Simulation
 
+## Force corners (part2)
+
+### Top left
+    >>>>>>>> skip null
+    >>[-]+ clearset V
+
+### Top right
+    >>>>[-]+ clearset a
+    [
+        [-] clear a
+        >>>>>>>> move next
+        [-]+ clearset a
+        <<<[-] clear L
+        << select N
+        [
+            [->>+<<] mov N to L
+            >>>>>[-] clear a
+            <<<<< select N
+        ]
+        >>[-<<+>>] mov L to N
+        >>> select a
+    ]
+
+    <<<<<<<<<<<< move prev V
+    [-]+ clearset V
+    << select F
+
+### Bottom right
+    [>>>>>>>>] scan forward
+    <<<<<<< select N
+    [<<<<<<<<] scan backward
+    >[-]+ clearset V
+
+### Bottom left
+    >>>>[-]+ clearset a
+    [
+        [-] clear a
+        <<<<<<<< move prev
+        [-]+ clearset a
+        <<<[-] clear L
+        << select N
+        [
+            [->>+<<] mov N to L
+            >>>>>[-] clear a
+            <<<<< select N
+        ]
+        >>[-<<+>>] mov L to N
+        >>> select a
+    ]
+
+    >>>> move next V
+    [-]+ clearset V
+    << select F
+
+### Scan back
+
+    <<<<<<<<[<<<<<<<<]
+
+
 <<<< select Iterations
 [
 - dec Iterations
@@ -216,6 +275,12 @@
 ### Scan back
 
     <<<<<<<<[<<<<<<<<]
+
+## Force corners again (part2 minified see above)
+>>>>>>>>>>[-]+>>>>[-]+[[-]>>>>>>>>[-]+<<<[-]<<[[->>+<<]>>>>>
+[-]<<<<<]>>[-<<+>>]>>>]<<<<<<<<<<<<[-]+<<[>>>>>>>>]<<<<<<<
+[<<<<<<<<]>[-]+>>>>[-]+[[-]<<<<<<<<[-]+<<<[-]<<[[->>+<<]>>>>>
+[-]<<<<<]>>[-<<+>>]>>>]>>>>[-]+<<<<<<<<<<[<<<<<<<<]
 
 ### Iteration loop
     <<<< select Iterations
