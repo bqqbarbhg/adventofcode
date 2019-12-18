@@ -16,6 +16,6 @@ fn main() {
         .flat_map(|l| l.parse::<i32>())
         .map(fuel_for_mass)
         .sum();
-    println!("{}\n", sum);
+    println!("{}", sum);
 }
 

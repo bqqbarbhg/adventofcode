@@ -7,6 +7,6 @@ fn main() {
         .flat_map(|l| l.parse::<i32>())
         .map(|n| n / 3 - 2)
         .sum();
-    println!("{}\n", sum);
+    println!("{}", sum);
 }
 
