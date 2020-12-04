@@ -106,6 +106,8 @@ bool pass_advance(pass_ctx *c, char ch)
 		if (ch == '\n') {
 			memset(c->field_count, 0, sizeof(c->field_count));
 			c->state = PS_KEYN;
+		} else {
+			c->state = PS_ERROR;
 		}
 		break;
 	}
