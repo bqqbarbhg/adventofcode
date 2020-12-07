@@ -1,6 +1,9 @@
 # Input files
 input.txt
 test.txt
+
+# Temporaries
 *.exe
 *.pdb
 proj/
+__pycache__/
