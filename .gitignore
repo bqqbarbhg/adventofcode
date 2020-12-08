@@ -7,3 +7,4 @@ test.txt
 *.pdb
 proj/
 __pycache__/
+.vscode/
