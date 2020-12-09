@@ -48,7 +48,7 @@ int main(int argc, char **argv)
     while (std::cin.good()) {
         int val = read<int>(std::cin);
         if (!window.contains(val)) {
-			std::cout << val << std::endl;
+            std::cout << val << std::endl;
             return 0;
         }
         window.pop_front();

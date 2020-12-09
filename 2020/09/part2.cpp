@@ -50,11 +50,11 @@ int find_part1(It begin, It end, size_t window_size) {
 
     for (; begin != end; ++begin) {
         int val = *begin;
-		if (!window.contains(val)) {
+        if (!window.contains(val)) {
             return val;
-		}
-		window.pop_front();
-		window.push_back(val);
+        }
+        window.pop_front();
+        window.push_back(val);
     }
 
     return -1;
