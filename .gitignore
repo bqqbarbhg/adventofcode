@@ -8,3 +8,4 @@ test.txt
 proj/
 __pycache__/
 .vscode/
+.ionide/
