@@ -10,7 +10,7 @@ let input =
 
 let rec waysOf counts delta =
     match delta with
-    | 1 -> (List.take 3 counts |> List.sum) :: counts
+    | 1 -> (counts |> List.take 3 |> List.sum) :: counts
     | _ -> waysOf (0L :: counts) (delta - 1)
 
 let ways =
