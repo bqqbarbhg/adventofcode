@@ -9,3 +9,4 @@ proj/
 __pycache__/
 .vscode/
 .ionide/
+zig-cache/
