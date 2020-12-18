@@ -67,7 +67,8 @@ val_t expr(pstate *ps)
     return v;
 }
 
-val_t eval(const char *c) {
+val_t eval(const char *c)
+{
     pstate ps = { c };
     return expr(&ps);
 }
