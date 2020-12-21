@@ -13,9 +13,9 @@ def assign(opts, assignments={}):
     _, name, values = min((len(vs), n, vs) for n,vs in opts.items())
     for v in values:
         opts_left = dict((n, vs - { v }) for n,vs in opts.items() if n != name)
-        if not all(opts_left.values()): return
-        res = assign(opts_left, assignments | { name: v }) 
-        if res: return res
+        if all(opts_left.values()):
+            res = assign(opts_left, assignments | { name: v }) 
+            if res: return res
 
 ag_ig_opts = { }
 ig_counts = { }
