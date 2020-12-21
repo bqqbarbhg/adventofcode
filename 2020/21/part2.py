@@ -5,7 +5,7 @@ def strip(strs):
 
 def parse_foods(lines):
     for line in lines:
-        igs, ags = line[:-1].split(" (contains ")
+        igs, ags = line[:-1].split("(contains")
         yield set(strip(igs.split())), set(strip(ags.split(",")))
 
 def assign(opts, assignments={}):
