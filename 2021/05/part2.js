@@ -141,7 +141,7 @@ async function downloadData(device, buffer, offset, size) {
         usage: GPUBufferUsage.MAP_READ | GPUBufferUsage.COPY_DST,
     })
 
-    // Copy the data to the buffer on the GPU.
+    // Copy the data from the buffer on the GPU.
     const encoder = device.createCommandEncoder()
     encoder.copyBufferToBuffer(buffer, offset, staging, 0, size)
     const commands = encoder.finish()
