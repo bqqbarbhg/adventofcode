@@ -46,7 +46,7 @@ fn main() {
     //     d1(a) + d2(a) <= d1(median) + d2(median)
     //     d1(a)-d1(median) + d2(a) <= d2(median)
     // As `d1(median)` is the minimum `d1(a) >= d1(median)` for all `a` so we
-    // can drop that expression and solve for a looser inequality:
+    // can drop `d1(a)-d1(median)` and solve for a looser inequality:
     //     d2(a) <= d2(median)
     // Since `d2(a)` is the square error from `a` we know it's minimum is located
     // at `mean = sum(x)/len(x)`. Both functions are convex we know that the
