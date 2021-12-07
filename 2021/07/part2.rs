@@ -29,7 +29,7 @@ fn main() {
     let median = positions[(num / 2) as usize];
 
     // Our new metric for a step of `n` is `sum(0..n)` which is in closed form
-    // a triangle number: `n*(n+1)/2 == (n^2 + n)/2`.
+    // a triangle number:
     //     sum(0..n)
     //   = n*(n+1) / 2
     //   = (n^2 + n) / 2
