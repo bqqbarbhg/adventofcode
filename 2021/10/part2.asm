@@ -7,12 +7,16 @@
 del_stack:
     .res 256
 
-score_a: .res 256
-score_b: .res 256
-score_c: .res 256
-score_d: .res 256
-score_e: .res 256
-score_f: .res 256
+score_list: .res 256*6
+
+.zeropage
+
+score_sum: .res 6
+score_tmp: .res 6
+num_scores: .res 1
+print_zeros: .res 1
+bubble_continue:
+final_char: .res 1
 
 .code
 
@@ -24,91 +28,47 @@ main:
     ; Add the score to the list if X != 0
     cpx #0
     beq @skip_add
-    ldx $30
-    lda $10
-    sta score_a,X
-    lda $11
-    sta score_b,X
-    lda $12
-    sta score_c,X
-    lda $13
-    sta score_d,X
-    lda $14
-    sta score_e,X
-    lda $15
-    sta score_f,X
+    ldx num_scores
+    .repeat 6,I
+        lda score_sum+I
+        sta score_list+I*256,X
+    .endrepeat
     inx
-    stx $30
+    stx num_scores
 @skip_add:
 
+    ; Keep reading lines until main_loop returns Y=0
     cpy #0
     bne @main_loop
 
     ; Bubble sort the scores
     jsr bubble_sort
 
-    ; DEBUG: Print the values
-    ldx #0
-@temploop:
-
-    lda score_a,X
-    sta $10
-    lda score_b,X
-    sta $11
-    lda score_c,X
-    sta $12
-    lda score_d,X
-    sta $13
-    lda score_e,X
-    sta $14
-    lda score_f,X
-    sta $15
-
-    inx
-    cpx $30
-    bne @temploop
-
     ; Copy the middle score to the zero page
-    lda $30
+    lda num_scores
     lsr
     tax
-    lda score_a,X
-    sta $10
-    lda score_b,X
-    sta $11
-    lda score_c,X
-    sta $12
-    lda score_d,X
-    sta $13
-    lda score_e,X
-    sta $14
-    lda score_f,X
-    sta $15
+    .repeat 6,I
+        lda score_list+I*256,X
+        sta score_sum+I
+    .endrepeat
 
     ; Print the score
-    lda $15
-    jsr print_bcd
-    lda $14
-    jsr print_bcd
-    lda $13
-    jsr print_bcd
-    lda $12
-    jsr print_bcd
-    lda $11
-    jsr print_bcd
-    lda $10
-    jsr print_bcd
+    .repeat 6,I
+        lda score_sum+5-I
+        jsr print_bcd
+    .endrepeat
 
     ; Print a zero if we did not print anything
-    lda $02
+    lda print_zeros
     bne @no_zero
     lda #$30 ; '0'
-    sta $f001
+    sta $f001 ; putchar()
 @no_zero:
 
     ; Write return code 0 to f002 to exit
     lda #$00
-    sta $f002
+    sta $f002 ; exit()
 
 ; Process a line of input, returns the last characer read in Y
 ; Returns X=1 if the score in $10-$13 should be added to the list
@@ -118,16 +78,13 @@ process_line:
     ldx #0
 
     ; Reset the current score
-    stx $10
-    stx $11
-    stx $12
-    stx $13
-    stx $14
-    stx $15
+    .repeat 6,I
+        stx score_sum+I
+    .endrepeat
 
 @loop:
     ; Read input byte from stream
-    ldy $f001
+    ldy $f001 ; getchar()
 
     ; Return from the loop if we hit \0 or \n
     beq @incomplete
@@ -189,7 +146,7 @@ process_line:
 
 @incomplete:
     ; Remember the final character
-    sty $20
+    sty final_char
 
     ; Loop through the pushed characters
 @incomplete_loop:
@@ -223,41 +180,27 @@ process_line:
     ; Do the addition in BCD
     sed
     clc
-    adc $10
-    sta $10
-    lda #0
-    adc $11
-    sta $11
-    lda #0
-    adc $12
-    sta $12
-    lda #0
-    adc $13
-    sta $13
-    cld
-    lda #0
-    adc $14
-    sta $14
-    cld
-    lda #0
-    adc $15
-    sta $15
+    .repeat 6,I
+        adc score_sum+I
+        sta score_sum+I
+        lda #0
+    .endrepeat
     cld
 
     jmp @incomplete_loop
 @incomplete_done:
-    ; TODO
+    ; Report as incomplete and load spilled final_char
     ldx #1
-    ldy $20
+    ldy final_char
     rts
 
 @skip_loop:
     ; Read input byte from stream
-    ldy $f001
+    ldy $f001 ; getchar()
 
     ; Return from the loop if we hit \0 or \n
     beq @ret
-    cpy #$0a
+    cpy #$0a ; '\n'
     beq @ret
 
     jmp @skip_loop
@@ -266,22 +209,14 @@ process_line:
     ldx #0
     rts
 
-; Multiply BCD $10-$15 by 5 (clobbers A,Y, $20-$25)
+; Multiply BCD score_sum by 5 (clobbers A,Y,score_tmp)
 mul_bcd_5:
 
-    ; Copy $10-$15 to $20-$25
-    lda $10
-    sta $20
-    lda $11
-    sta $21
-    lda $12
-    sta $22
-    lda $13
-    sta $23
-    lda $14
-    sta $24
-    lda $15
-    sta $25
+    ; Copy the score to a temporary slot
+    .repeat 6,I
+        lda score_sum+I
+        sta score_tmp+I
+    .endrepeat
 
     ldy #0
 @mul_loop:
@@ -289,27 +224,11 @@ mul_bcd_5:
     ; Add $15-$19 to $10-$14 in BCD
     sed
     clc
-    lda $10
-    adc $20
-    sta $10
-    lda $11
-    adc $21
-    sta $11
-    lda $12
-    adc $22
-    sta $12
-    lda $13
-    adc $23
-    sta $13
-    lda $14
-    adc $24
-    sta $14
-    lda $15
-    adc $25
-    sta $15
-    lda $16
-    adc $26
-    sta $16
+    .repeat 6,I
+        lda score_sum+I
+        adc score_tmp+I
+        sta score_sum+I
+    .endrepeat
     cld
 
     ; Repeat the addition 5 times
@@ -320,71 +239,40 @@ mul_bcd_5:
     rts
 
 bubble_swap:
-    lda score_a,X
-    ldy score_a-1,X
-    sta score_a-1,X
-    tya
-    sta score_a,X
-    lda score_b,X
-    ldy score_b-1,X
-    sta score_b-1,X
-    tya
-    sta score_b,X
-    lda score_c,X
-    ldy score_c-1,X
-    sta score_c-1,X
-    tya
-    sta score_c,X
-    lda score_d,X
-    ldy score_d-1,X
-    sta score_d-1,X
-    tya
-    sta score_d,X
-    lda score_e,X
-    ldy score_e-1,X
-    sta score_e-1,X
-    tya
-    sta score_e,X
-    lda score_f,X
-    ldy score_f-1,X
-    sta score_f-1,X
-    tya
-    sta score_f,X
-    ldy #1
-    sty $31
+    .repeat 6,I
+        lda score_list+I*256,X   ; A = score_list[X]
+        ldy score_list+I*256-1,X ; Y = score_list[X-1]
+        sta score_list+I*256-1,X ; score_list[X-1] = A
+        tya                      ; A = Y
+        sta score_list+I*256,X   ; score_list[X-1] = A
+    .endrepeat
     rts
 
 ; Bubble sort scroes
 bubble_sort:
     ; Iterate backwards
-    ldx $30
+    ldx num_scores
     dex
 
-    ; Reset $31 mark that indicates whether we need an extra iteration
+    ; Reset mark that indicates whether we need an extra iteration
     ldy #0
-    sty $31
+    sty bubble_continue
 
 @loop:
-    ; Subtract two consecutive values in BCD
+    ; Subtract two consecutive values in BCD to get the carry flag
     sed
     clc
-    lda score_a,X
-    sbc score_a-1,X
-    lda score_b,X
-    sbc score_b-1,X
-    lda score_c,X
-    sbc score_c-1,X
-    lda score_d,X
-    sbc score_d-1,X
-    lda score_e,X
-    sbc score_e-1,X
-    lda score_f,X
-    sbc score_f-1,X
+    .repeat 6,I
+        lda score_list+I*256,X
+        sbc score_list+I*256-1,X
+    .endrepeat
     cld
 
-    ; Swap the values if necessary
+    ; Swap the values if necessary and mark that we need to continue sorting
     bcs @skip_swap
     jsr bubble_swap
+    ldy #1
+    sty bubble_continue
 @skip_swap:
 
     ; Loop until we reach 0
@@ -392,13 +280,13 @@ bubble_sort:
     bne @loop
 
     ; Do another iteration if we did at least one swap
-    lda $31
+    lda bubble_continue
     bne bubble_sort
 
     rts
 
 ; Print two BCD digits at A
-; $02 contains 0 if leading zeros should not be printed, ff otherwise
+; print_zeros contains 0 if leading zeros should not be printed, ff otherwise
 print_bcd:
     ; Use Y as loop counter
     ldy #2
@@ -407,10 +295,9 @@ print_bcd:
     tax
 
     ; Shift the high nibble to low as we want to print it first
-    lsr
-    lsr
-    lsr
-    lsr
+    .repeat 4
+        lsr
+    .endrepeat
     jmp @loop_a
 
 @loop:
@@ -424,17 +311,17 @@ print_bcd:
 
 @loop_a:
     ; Skip printing leading zeroes
-    cmp $02
+    cmp print_zeros
     beq @loop
 
     ; Print the digit
     clc
     adc #$30 ; '0'
-    sta $f001
+    sta $f001 ; putchar()
 
     ; Mark that leading zeroes should be printed
     lda #$ff
-    sta $02
+    sta print_zeros
 
     jmp @loop
 
