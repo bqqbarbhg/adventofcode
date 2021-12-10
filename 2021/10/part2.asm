@@ -63,7 +63,6 @@ main:
     sta $14
     lda score_f,X
     sta $15
-    sta $f110
 
     inx
     cpx $30
