@@ -77,9 +77,9 @@ int main(int argc, char **argv)
 		rows[row] = _mm_loadu_si128((__m128i*)line);
 	}
 
-    size_t num_steps = 0;
-    for (; ; num_steps++) {
-        uint32_t procs = step();
+	size_t num_steps = 0;
+	for (; ; num_steps++) {
+		uint32_t procs = step();
 		if (procs == 100) break;
 	}
 
