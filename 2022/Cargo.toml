@@ -1,0 +1,12 @@
+[package]
+name = "aoc-2022"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "day01-part1"
+path = "01/part1.rs"
+
+[[bin]]
+name = "day01-part2"
+path = "01/part2.rs"
