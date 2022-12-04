@@ -2,6 +2,7 @@
 name = "aoc-2022"
 version = "0.1.0"
 edition = "2021"
+default-run = "test"
 
 [[bin]]
 name = "day01-part1"
@@ -35,3 +36,6 @@ path = "04/part1.rs"
 name = "day04-part2"
 path = "04/part2.rs"
 
+[[bin]]
+name = "test"
+path = "test.rs"
