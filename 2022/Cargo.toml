@@ -4,6 +4,9 @@ version = "0.1.0"
 edition = "2021"
 default-run = "test"
 
+[dependencies]
+regex = "1"
+
 [[bin]]
 name = "day01-part1"
 path = "01/part1.rs"
@@ -35,6 +38,14 @@ path = "04/part1.rs"
 [[bin]]
 name = "day04-part2"
 path = "04/part2.rs"
+
+[[bin]]
+name = "day05-part1"
+path = "05/part1.rs"
+
+[[bin]]
+name = "day05-part2"
+path = "05/part2.rs"
 
 [[bin]]
 name = "test"
