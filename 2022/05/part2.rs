@@ -46,7 +46,7 @@ fn main() {
             let (src, dst) = get_disjoint(&mut stacks, src - 1, dst - 1);
             assert!(num <= src.len(), "Trying to pop {} from {}", num, src.len());
             let pos = src.len() - num;
-            dst.extend(&src[pos..]);
+            dst.extend_from_slice(&src[pos..]);
             src.truncate(pos);
         }
     }
