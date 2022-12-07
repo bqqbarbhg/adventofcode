@@ -6,6 +6,7 @@ default-run = "test"
 
 [dependencies]
 regex = "1"
+lazy_static = "1.4.0"
 
 [[bin]]
 name = "day01-part1"
@@ -54,6 +55,14 @@ path = "06/part1.rs"
 [[bin]]
 name = "day06-part2"
 path = "06/part2.rs"
+
+[[bin]]
+name = "day07-part1"
+path = "07/part1.rs"
+
+[[bin]]
+name = "day07-part2"
+path = "07/part2.rs"
 
 [[bin]]
 name = "test"
