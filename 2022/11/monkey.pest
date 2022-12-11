@@ -1,0 +1,23 @@
+WHITESPACE = _{ " " }
+
+old = { "old" }
+number = { ASCII_DIGIT+ }
+op = { "+" | "*" }
+arg = { old | number }
+bool = { "true" | "false" }
+
+head = { "Monkey " ~ number ~ ":" }
+items = { "Starting items: " ~ (number ~ ","?)* }
+operation = { "Operation: new = " ~ arg ~ op ~ arg }
+test = { "Test: divisible by " ~ number }
+cond = { "If " ~ bool ~ ":" ~ "throw to monkey " ~ number }
+
+monkey = { head
+    ~ NEWLINE ~ items
+    ~ NEWLINE ~ operation
+    ~ NEWLINE ~ test
+    ~ NEWLINE ~ cond
+    ~ NEWLINE ~ cond
+}
+
+file = { (NEWLINE* ~ monkey ~ NEWLINE*)* }

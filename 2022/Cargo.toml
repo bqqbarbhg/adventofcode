@@ -8,6 +8,8 @@ default-run = "test"
 regex = "1"
 lazy_static = "1.4.0"
 derive_more = "0.99.17"
+pest = "2.5.1"
+pest_derive = "2.5.1"
 
 [[bin]]
 name = "day01-part1"
@@ -88,6 +90,14 @@ path = "10/part1.rs"
 [[bin]]
 name = "day10-part2"
 path = "10/part2.rs"
+
+[[bin]]
+name = "day11-part1"
+path = "11/part1.rs"
+
+[[bin]]
+name = "day11-part2"
+path = "11/part2.rs"
 
 [[bin]]
 name = "test"
