@@ -4,6 +4,21 @@ use std::path::Path;
 use std::process::{Stdio,Command};
 use std::str;
 
+fn split_lines(s: &str) -> Vec<String> {
+    s.lines()
+        .map(|l| l.trim().to_owned())
+        .filter(|l| !l.is_empty())
+        .collect()
+}
+
+fn format_lines(lines: &[String]) -> String {
+    match &lines {
+        &[] => "(empty)".to_owned(),
+        &[line] => line.clone(),
+        _ => format!("({} lines)", lines.len()),
+    }
+}
+
 fn main() {
     let self_exe = std::env::current_exe().unwrap();
     let exe_ext = self_exe
@@ -21,7 +36,7 @@ fn main() {
         let day_str = format!("{:02}", day);
         let path = Path::new(&day_str);
         if !path.is_dir() {
-            println!("Tested up to day {}!", day - 1);
+            println!("\nTested up to day {}!", day - 1);
             break
         }
 
@@ -42,19 +57,19 @@ fn main() {
                 .expect("Failed to run executable");
 
             let result = str::from_utf8(&exe_output.stdout).unwrap();
-
-            let result = result.trim();
+            let result = split_lines(result);
 
             if let Some(output) = fs::read_to_string(output_path).ok() {
-                let output = output.trim();
+                let output = split_lines(&output);
                 if result == output {
-                    println!("{} OK!", result);
+                    println!("{} OK!", format_lines(&result));
                     num_ok += 1;
                 } else {
-                    println!("{} FAIL (expected {})", result, output);
+                    println!("FAIL\n-- expected --\n{}\n-- got --\n{}\n--",
+                        output.join("\n"), result.join("\n"));
                 }
             } else {
-                println!("{}", result);
+                println!("{}", format_lines(&result));
                 num_missing += 1;
             }
             num_tested += 1;
