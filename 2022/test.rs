@@ -1,5 +1,6 @@
 use std::fs::{self, File};
 use std::io::{self, Write};
+use std::time::Instant;
 use std::path::Path;
 use std::process::{Stdio,Command};
 use std::str;
@@ -51,10 +52,12 @@ fn main() {
             print!("{:02}/{}: ", day, part);
             io::stdout().flush().unwrap();
 
+            let pre = Instant::now();
             let exe_output = Command::new(exe_path.as_path())
                 .stdin(Stdio::from(input))
                 .output()
                 .expect("Failed to run executable");
+            let post = Instant::now();
 
             let result = str::from_utf8(&exe_output.stdout).unwrap();
             let result = split_lines(result);
@@ -62,7 +65,9 @@ fn main() {
             if let Some(output) = fs::read_to_string(output_path).ok() {
                 let output = split_lines(&output);
                 if result == output {
-                    println!("{} OK!", format_lines(&result));
+                    let ms = (post - pre).as_millis();
+                    let line = format!("{} OK!", format_lines(&result));
+                    println!("{:-20} \x1b[90m({}ms)\x1b[0m", line, ms);
                     num_ok += 1;
                 } else {
                     println!("FAIL\n-- expected --\n{}\n-- got --\n{}\n--",
