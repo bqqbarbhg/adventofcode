@@ -11,6 +11,8 @@ derive_more = "0.99.17"
 pest = "2.5.1"
 pest_derive = "2.5.1"
 fxhash = "0.2.1"
+scan_fmt = "0.2.6"
+rayon = "1.6.1"
 
 [[bin]]
 name = "day01-part1"
@@ -123,6 +125,14 @@ path = "14/part1.rs"
 [[bin]]
 name = "day14-part2"
 path = "14/part2.rs"
+
+[[bin]]
+name = "day15-part1"
+path = "15/part1.rs"
+
+[[bin]]
+name = "day15-part2"
+path = "15/part2.rs"
 
 [[bin]]
 name = "test"
