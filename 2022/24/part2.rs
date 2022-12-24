@@ -30,7 +30,8 @@ fn main() {
     let up = make_bits(height, width, |x, y| input[x][y] == '^');
     let down = make_bits(height, width, |x, y| input[x][y] == 'v');
 
-    let free = |x: i32, y: i32, t: i32| {
+    type State = (i32, i32, i32);
+    let free = |(x, y, t): State| {
         let (w, h) = (width as i32, height as i32);
         if x < 0 || y < 0 || x >= w || y >= h { return false; }
         let mut r = has_bit(wall[y as usize], x as i32);
@@ -46,13 +47,11 @@ fn main() {
 
     let mut start = (top.0, top.1, 0);
     for goal in [bottom, top, bottom] {
-        type State = (i32, i32, i32);
         let next = |(x, y, t): State| -> StateInfo<State> {
             if y == goal.1 { return StateInfo::Goal; }
             let next: Vec<_> = DIRS.iter()
-                .flat_map(|&(dx, dy)| {
-                    free(x + dx, y + dy, t + 1).then_some((x + dx, y + dy, t + 1))
-                })
+                .map(|(dx, dy)| (x + dx, y + dy, t + 1))
+                .flat_map(|s| free(s).then_some(s))
                 .map(|(x, y, t)| StateNext {
                     state: (x, y, t),
                     cost: 1,
