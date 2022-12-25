@@ -33,7 +33,7 @@ fn main() {
     let mut num_missing = 0;
     let mut num_tested = 0;
 
-    for day in 1..=24 {
+    for day in 1..=25 {
         let day_str = format!("{:02}", day);
         let path = Path::new(&day_str);
         if !path.is_dir() {
@@ -67,7 +67,7 @@ fn main() {
                 if result == output {
                     let ms = (post - pre).as_millis();
                     let line = format!("{} OK!", format_lines(&result));
-                    println!("{:-20} \x1b[90m({}ms)\x1b[0m", line, ms);
+                    println!("{:-24} \x1b[90m({}ms)\x1b[0m", line, ms);
                     num_ok += 1;
                 } else {
                     println!("FAIL\n-- expected --\n{}\n-- got --\n{}\n--",
